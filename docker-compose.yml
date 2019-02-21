@@ -1,0 +1,58 @@
+version: "3.7"
+
+networks:
+  web:
+    driver: bridge
+  internal:
+    driver: bridge
+
+services:
+  db:
+    restart: always
+    container_name: db
+    image: postgres:11-alpine
+    networks:
+      - internal
+    volumes:
+      - ${PWD}/.data/postgresql:/var/lib/postgresql/data
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    links:
+      - "db"
+    networks:
+      - internal
+
+  nginx:
+    container_name: nginx
+    image: "nginx:stable"
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    networks:
+      - web
+      - internal
+
+    env_file:
+      - .env
+    links:
+      - adminer
+
+  api:
+    build: .
+    container_name: api
+    tty: true
+    restart: always
+    volumes:
+      - .:/code
+    links:
+      - "db"
+    networks:
+      - internal
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
