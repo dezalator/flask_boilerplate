@@ -8,4 +8,5 @@ while true; do
     sleep 5
 done
 #flask translate compile
-exec gunicorn -b :8000 --access-logfile - --error-logfile - app:app
+flask run --host=0.0.0.0 --port=8000
+#exec gunicorn -b :8000 --access-logfile - --error-logfile - app:app
