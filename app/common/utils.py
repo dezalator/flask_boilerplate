@@ -1,13 +1,10 @@
-from flask_restful import abort
+from flask_jwt_extended import create_access_token, create_refresh_token
 
-
-TODOS = {
-    'todo1': {'task': 'build an API'},
-    'todo2': {'task': '?????'},
-    'todo3': {'task': 'profit!'},
-}
-
-
-def abort_if_todo_doesnt_exist(todo_id):
-    if todo_id not in TODOS:
-        abort(404, message="Todo {} doesn't exist".format(todo_id))
+def jwt_authorize(user):
+    access_token = create_access_token(user.username)
+    refresh_token = create_refresh_token(user.username)
+    return {
+        'id': user.id,
+        'access_token': access_token,
+        'refresh_token': refresh_token
+    }

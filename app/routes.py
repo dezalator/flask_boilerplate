@@ -1,6 +1,6 @@
 from flask import jsonify
 from app import api
-from app.resources.todo import TodoList, Todo
+from app.resources.auth import User, UserList, UserLogin, TokenRefresh, Secret
 
 
 @api.representation('application/json')
@@ -15,5 +15,8 @@ def output_json(data, code, headers=None):
     return resp
 
 
-api.add_resource(TodoList, '/todos')
-api.add_resource(Todo, '/todos/<todo_id>')
+api.add_resource(UserList, '/users/')
+api.add_resource(UserLogin, '/login/')
+api.add_resource(User, '/user/<user_id>/')
+api.add_resource(TokenRefresh, '/token/')
+api.add_resource(Secret, '/secret/')
