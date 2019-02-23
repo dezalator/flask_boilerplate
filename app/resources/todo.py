@@ -1,4 +1,4 @@
-from flask_restful import reqparse, abort, Api, Resource
+from flask_restful import reqparse, Resource
 from app.common.utils import abort_if_todo_doesnt_exist, TODOS
 
 
