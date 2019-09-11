@@ -1,17 +1,18 @@
 import json
-from pprint import pprint
+
 
 def _register(client, username, password):
     return client.post(
-        '/users/',
-        data=json.dumps({'username': username,'password': password}),
+        '/register/',
+        data=json.dumps({'username': username, 'password': password, 'repeated_password': password}),
         content_type='application/json'
     ).json
+
 
 def _login(client, username, password):
     return client.post(
         '/login/',
-        data=json.dumps({'username': username,'password': password}),
+        data=json.dumps({'username': username, 'password': password}),
         content_type='application/json'
     ).json
 
@@ -23,9 +24,11 @@ def _access(client, access_token):
         content_type='application/json'
     ).json
 
+
 def test_no_access(client):
     resp = client.get('/secret/', content_type='application/json')
     assert not resp.json['success']
+
 
 def test_register(client):
     new_user_data = _register(client, 'test', '1234')
@@ -34,9 +37,11 @@ def test_register(client):
     assert new_user_data['data']['refresh_token']
     assert new_user_data['data']['id']
 
+
 def test_wrong_password(client):
     login = _login(client, 'test', '2345')
     assert not login['success']
+
 
 def test_login(client):
     login = _login(client, 'test', '1234')
@@ -45,6 +50,7 @@ def test_login(client):
     assert login['data']['access_token']
     assert login['data']['refresh_token']
     assert login['data']['id']
+
 
 def test_access(client):
     login = _login(client, 'test', '1234')

@@ -2,6 +2,7 @@ import pytest
 from app import app as _app
 from app.models.auth import User
 
+
 @pytest.fixture(scope='session')
 def app():
     with _app.app_context():
